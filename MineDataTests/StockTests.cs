@@ -30,7 +30,7 @@ namespace ConsoleApplication1.Tests
         {
             var stockCode = "603969";
             var aStock = new Stock(stockCode, StockType.SH);
-            var da = aStock.GetBundleStock("20160114", "20160202");
+            var da = aStock.GetBundleStock("20160114", "20160202", false);
         }
 
         [TestMethod()]
@@ -38,7 +38,7 @@ namespace ConsoleApplication1.Tests
         {
             var stockCode = "000016";
             var aStock = new Stock(stockCode, StockType.SZ);
-            var da = aStock.GetBundleStock("20160114", "20160202");
+            var da = aStock.GetBundleStock("20160114", "20160202", false);
         }
     }
 }

@@ -15,31 +15,36 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            var path = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+            //var path = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 
 
-            var currentDate = DateTime.Now;
-            var before181 = currentDate.AddDays(-365);
+            //var currentDate = DateTime.Now;
+            //var before181 = currentDate.AddDays(-365);
 
-            var from = before181.ToString("yyyyMMdd");
-            var to = currentDate.ToString("yyyyMMdd");
+            //var from = before181.ToString("yyyyMMdd");
+            //var to = currentDate.ToString("yyyyMMdd");
 
-            using (var sr = new StreamReader("../../../resource/SH/StockCode_SH.dat"))
-            {
-                while (!sr.EndOfStream)
-                {
-                    var line = sr.ReadLine();
-                    var items = line.Split(' ');
-                    if (items.Length == 2)
-                    {
-                        var code = items[1];
-                        var aStock = new Stock(code, StockType.SH);
-                        aStock.GetBundleStock(from, to);                        
-                    }
-                }
-            }
+            //using (var sr = new StreamReader("../../../resource/SH/StockCode_SH.dat"))
+            //{
+            //    while (!sr.EndOfStream)
+            //    {
+            //        var line = sr.ReadLine();
+            //        var items = line.Split(' ');
+            //        if (items.Length == 2)
+            //        {
+            //            var code = items[1];
+            //            var aStock = new Stock(code, StockType.SH);
+            //            aStock.GetBundleStock(from, to, false);                        
+            //        }
+            //    }
+            //}
+
+
+            var mgr = new StockManager();
+            mgr.Download(365);
 
             Console.WriteLine("done.");
+            Console.ReadKey();
         }
 
 

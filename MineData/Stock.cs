@@ -22,7 +22,7 @@ namespace ConsoleApplication1
         //const string headerFmt = "_ntes_quote_callback({\"0603969\":";
         const string tailerFmt = " });";
 
-        private string _path => System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+        private string _path => "../../../resource/"; //System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
         private string symbol;
         private StockType stockType;
 

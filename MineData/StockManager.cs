@@ -9,7 +9,7 @@ namespace ConsoleApplication1
 {
     public class StockManager
     {
-        public string StockCodePosition => "../../../ resource / SH / StockCode_SH.dat";
+        public string StockCodePosition => "../../../resource/SH/StockCode_SH.dat";
 
 
 
