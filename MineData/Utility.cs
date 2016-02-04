@@ -15,5 +15,13 @@ namespace MNT.Utility
             string decodedString = utf8.GetString(encodeBytes);
             return decodedString;
         }
+
+        public static string GetUtf32(string unicodeString)
+        {
+            var utf8 = new UTF32Encoding();
+            byte[] encodeBytes = utf8.GetBytes(unicodeString);
+            string decodedString = utf8.GetString(encodeBytes);
+            return decodedString;
+        }
     }
 }

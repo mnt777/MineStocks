@@ -25,7 +25,7 @@ namespace ConsoleApplication1
             }
             else
             {
-                request = WebRequest.Create(url) as HttpWebRequest;
+                request = WebRequest.Create(url) as HttpWebRequest;                
             }
             request.Method = "GET";
 

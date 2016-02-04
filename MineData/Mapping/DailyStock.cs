@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication1.Mapping
 {
+
     public class DailyStock
     {
         //arrow: "↓"
         public string arrow { get; set; }
 
-        //ask1: 47.35
-        //ask2: 47.36
-        //ask3: 47.37
-        //ask4: 47.38
-        //ask5: 47.39//卖1 价 47.35
         /// <summary>
         /// 卖1价
         /// </summary>
@@ -36,12 +32,6 @@ namespace ConsoleApplication1.Mapping
         /// 卖5价
         /// </summary>
         public string ask5 { get; set; }
-
-        //askvol1: 700					//卖1 量 700股
-        //askvol2: 400
-        //askvol3: 400
-        //askvol4: 400
-        //askvol5: 1871
         /// <summary>
         /// 卖1量（股)
         /// </summary>
@@ -62,12 +52,6 @@ namespace ConsoleApplication1.Mapping
         /// 卖5量（股)
         /// </summary>
         public string askvol5 { get; set; }
-
-//bid1: 47.32						//买1
-//bid2: 47.31						//买2
-//bid3: 47.28						//
-//bid4: 47.26						//
-//bid5: 47.25						//
         /// <summary>
         /// 买1价
         /// </summary>
@@ -88,14 +72,6 @@ namespace ConsoleApplication1.Mapping
         /// 买5价
         /// </summary>
         public string bid5 { get; set; }
-
-        //bidvol1: 8600					//买1 量 8600股
-        //bidvol2: 31500
-        //bidvol3: 100
-        //bidvol4: 1400
-        //bidvol5: 7800
-
-
         /// <summary>
         /// 买1量（股）
         /// </summary>
@@ -173,7 +149,7 @@ namespace ConsoleApplication1.Mapping
 
 
         public string status { get; set; }
-        public string   time { get; set; }
+        public string time { get; set; }
         public string update { get; set; }
 
     }
