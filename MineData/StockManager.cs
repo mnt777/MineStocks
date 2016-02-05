@@ -4,40 +4,64 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleApplication1.Mapping;
+using MNT.Utility;
 
 namespace ConsoleApplication1
 {
     public class StockManager
     {
-        public string StockCodePosition => "../../../resource/SH/StockCode_SH.dat";
+        public string StockCodePosition = CommonInfo.SHStockCodePosition;
+
+        private List<StockInfo> stockInfos;
+
+        public StockManager()
+        {
+            stockInfos = StockInfo.GetSHStockCodes();
+        }
 
 
+        public BundleStock DownloadTodaySpecialStock(StockInfo stockInfo)
+        {
+            return BundleStock.AppendTodayStock(stockInfo.StockCode, DateTime.Now.ToString("yyyyMMdd"));
+        }
 
+        public void DownloadSpecialStock(StockInfo stockInfo, string from, string to)
+        {
+            BundleStock.SaveTo(stockInfo, from, to);
+        }
+
+        /// <summary>
+        /// insert today's prices
+        /// </summary>
+        public void DownloadToday()
+        {
+            var currentDate = DateTime.Now.ToString("yyyyMMdd");
+
+            foreach (var aStockCodeInfo in stockInfos)
+            {
+                BundleStock.AppendTodayStock(aStockCodeInfo.StockCode, currentDate);
+            }
+        }
+
+        /// <summary>
+        /// Download, data will be recovered.
+        /// </summary>
+        /// <param name="day"></param>
         public void Download(int day)
         {
             var to = DateTime.Now.ToString("yyyyMMdd");
             var from = DateTime.Now.AddDays(day*-1).ToString("yyyyMMdd");
-            Download(from, to, false);
+            Download(from, to);
         }
 
-        public void Download(string from, string to, bool isAppend)
+        public void Download(string from, string to)
         {
-            var path = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-
-            using (var sr = new StreamReader(StockCodePosition))
+            foreach (var stock in stockInfos)
             {
-                while (!sr.EndOfStream)
-                {
-                    var line = sr.ReadLine();
-                    var items = line.Split(' ');
-                    if (items.Length == 2)
-                    {
-                        var code = items[1];
-                        var aStock = new Stock(code, StockType.SH);
-                        aStock.GetBundleStock(from, to, isAppend);
-                    }
-                }
+                BundleStock.SaveTo(stock, from, to);
             }
+
         }
     }
 }

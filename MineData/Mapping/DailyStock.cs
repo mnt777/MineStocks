@@ -152,5 +152,13 @@ namespace ConsoleApplication1.Mapping
         public string time { get; set; }
         public string update { get; set; }
 
+
+        public override string ToString()
+        {
+            //日期,股票代码,名称,收盘价,最高价,最低价,开盘价,前收盘,涨跌额,涨跌幅,换手率,成交量,成交金额,总市值,流通市值
+            //return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14}",
+            //    );
+            return base.ToString();
+        }
     }
 }

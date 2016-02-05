@@ -45,6 +45,15 @@ namespace ConsoleApplication1
 
             Console.WriteLine("done.");
             Console.ReadKey();
+
+            
+//            var fs = new FileStream("d:/output.dat", FileMode.Open);
+//            var data = "line1\r\n";
+//            var buff = new UTF8Encoding().GetBytes(data);
+//            fs.Write(buff, 0, buff.Length);
+//            fs.Flush();
+//            fs.Close();
+
         }
 
 

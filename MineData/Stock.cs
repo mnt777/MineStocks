@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ConsoleApplication1.Mapping;
 using MNT.JsonHelper;
+using MNT.Utility;
 
 namespace ConsoleApplication1
 {
@@ -17,102 +18,72 @@ namespace ConsoleApplication1
     }
     public class Stock
     {
-        const string fetchURL = "http://api.money.126.net/data/feed/{0},money.api";
-        const string errorMsg = "_ntes_quote_callback({ });";
-        //const string headerFmt = "_ntes_quote_callback({\"0603969\":";
-        const string tailerFmt = " });";
 
-        private string _path => "../../../resource/"; //System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-        private string symbol;
-        private StockType stockType;
+        private StockInfo stockInfo;
+        private List<BundleStock> History = new List<BundleStock>();
 
-        public string stockCode
+        public Stock(StockInfo info)
         {
-            get
-            {
-                if (stockType == StockType.SH)
-                {
-                    return "0" + symbol;
-                }
-                else
-                {
-                    return "1" + symbol;
-                }
-            }
+            this.stockInfo = info;
         }
 
-        public Stock(string code, StockType stockType)
+        public void LoadHistory()
         {
-            symbol = code;
-            this.stockType = stockType;
+            History = BundleStock.Load(stockInfo);
+        }
+
+        public List<decimal> MAForDay(int day)
+        {            
+            if (History.Count() < day) LoadHistory();
+            
+            return GetMALine(History, day);
+        }
+
+        public List<decimal> MAForWeek(int day)
+        {
+            if (History.Count() == 0) LoadHistory();
+            var data = History.Where(it => it.Date.DayOfWeek == DayOfWeek.Friday);
+            return GetMALine(data, day);
+        }
+
+        private List<decimal> GetMALine(IEnumerable<BundleStock> historyData, int day)
+        {
+            var ret = new List<decimal>();
+            const int dataLength = 5;
+            var loopStop = History.Count() / day;
+
+            if (loopStop > dataLength) loopStop = dataLength;
+
+            for (int i = 0; i < loopStop; i++)
+            {
+                var data = historyData.OrderByDescending(it => it.Date).Skip(i).Take(day);
+                var sum = data.Sum(it => it.Close);
+                ret.Add(sum/day*1.0M);
+            }
+            return ret;
         }
 
         public DailyStock GetRealTimeInfo()
         {
-
-            var originData = GetNetStockData(stockCode);
+            var originData = GetNetStockData(stockInfo.StockCode);
             var header = BuildHeader();
-            var d = originData.Substring(header.Length, originData.Length - header.Length - tailerFmt.Length);
+            var d = originData.Substring(header.Length, originData.Length - header.Length - CommonInfo.tailerFmt.Length);
             var aRealTimeStock = JsonHelper.DeserializeJsonToObject<DailyStock>(d);
             return aRealTimeStock;
         }
 
-        public object GetBundleStock(string from, string to, bool isAppendData)
-        {
-
-            var url = BuildFetchURL(stockCode, from, to);
-
-            var response = HttpHelper.CreateGetHttpResponse(url, 3000, null, null);
-            var stream = response.GetResponseStream();
-            if (stream == null) return null;
-            var reader = new StreamReader(stream, System.Text.Encoding.Default);
-            var title = reader.ReadLine();
-            var msg = reader.ReadToEnd();
-            if (string.IsNullOrEmpty(msg)) return null;
-
-            Save(msg, isAppendData);
-            return null;
-        }
-
-        private void Save(string data, bool isAppend)
-        {
-
-            using (var sw = new StreamWriter(FilePath(), isAppend)) 
-            {
-                sw.Write(data);
-            }
-        }
-
-        private string FilePath()
-        {
-            var path = _path + "\\Data\\";
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            return path + symbol + ".dat";
-            
-        }
-
         private string BuildHeader()
         {
-            return "_ntes_quote_callback({\"" + stockCode + "\":";
+            return "_ntes_quote_callback({\"" + stockInfo.StockCode + "\":";
         }
 
-        private string BuildFetchURL(string stockCode, string from, string to)
-        {
-            return "http://quotes.money.163.com/service/chddata.html?code="+stockCode 
-                +"&start="+ from 
-                +"&end="+ to
-                +"&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP";
-        }
         private  string GetNetStockData(string stockCode)
         {
-            string url = string.Format(fetchURL, stockCode);
+            string url = string.Format(CommonInfo.fetchURL, stockCode);
             var response = HttpHelper.CreateGetHttpResponse(url, 3000, null, null);
             var reader = new StreamReader(response.GetResponseStream());
             var msg = reader.ReadToEnd();
-            if (msg == errorMsg) msg = "";
+            if (msg == CommonInfo.errorMsg) msg = "";
             return msg;
         }
     }
