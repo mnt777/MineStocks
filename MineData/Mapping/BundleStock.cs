@@ -149,14 +149,14 @@ namespace ConsoleApplication1.Mapping
             aStock.High = decimal.Parse(items[4]);
             aStock.Low = decimal.Parse(items[5]);
             aStock.Open = decimal.Parse(items[6]);
-            aStock.YesterdayClose = decimal.Parse(items[7]);
-            aStock.UpDown = decimal.Parse(items[8]);
-            aStock.Percent = decimal.Parse(items[9]);
-            aStock.ChangeRate = decimal.Parse(items[10]);
-            aStock.Volume = decimal.Parse(items[11]);
-            aStock.Turnover = decimal.Parse(items[12]);
-            aStock.TotalValue = decimal.Parse(items[13]);
-            aStock.CirculationValue = decimal.Parse(items[14]);
+//            aStock.YesterdayClose = decimal.Parse(items[7]);
+//            aStock.UpDown = decimal.Parse(items[8]);
+//            aStock.Percent = decimal.Parse(items[9]);
+//            aStock.ChangeRate = decimal.Parse(items[10]);
+//            aStock.Volume = decimal.Parse(items[11]);
+//            aStock.Turnover = decimal.Parse(items[12]);
+//            aStock.TotalValue = decimal.Parse(items[13]);
+//            aStock.CirculationValue = decimal.Parse(items[14]);
 
             return aStock;
         }

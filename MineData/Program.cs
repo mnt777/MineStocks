@@ -40,11 +40,11 @@ namespace ConsoleApplication1
             //}
 
 
-            var mgr = new StockManager();
-            mgr.Download(365);
+            //var mgr = new StockManager();
+            //mgr.Download(365);
 
-            Console.WriteLine("done.");
-            Console.ReadKey();
+            //Console.WriteLine("done.");
+            //Console.ReadKey();
 
             
 //            var fs = new FileStream("d:/output.dat", FileMode.Open);
@@ -53,6 +53,13 @@ namespace ConsoleApplication1
 //            fs.Write(buff, 0, buff.Length);
 //            fs.Flush();
 //            fs.Close();
+
+            var mgr = new StockManager();
+            var data = mgr.Select2();
+
+            var sw = new StreamWriter(@"D:\output.dat");
+            sw.Write(data);
+            sw.Close();
 
         }
 
