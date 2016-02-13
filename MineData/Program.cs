@@ -54,12 +54,50 @@ namespace ConsoleApplication1
 //            fs.Flush();
 //            fs.Close();
 
-            var mgr = new StockManager();
-            var data = mgr.Select2();
+// 2016-02-13
+//            var mgr = new StockManager();
+//            var data = mgr.Select2();
+//
+//            var sw = new StreamWriter(@"D:\output.dat");
+//            sw.Write(data);
+//            sw.Close();
+            
+            //按星期切分时间
+            var dates = new List<DateTime>();
+            var current = DateTime.Now;
 
-            var sw = new StreamWriter(@"D:\output.dat");
-            sw.Write(data);
-            sw.Close();
+            for (int i = 0; i < 10; i++)
+            {
+                dates.Add(current.AddDays(i *-3));
+            }
+
+            var ret = new List<List<DateTime>>();
+            ret.Add(new List<DateTime>());
+           
+            int pos = 0;
+            var c = ret[pos];
+            c.Add(dates[0]);
+
+
+            for (int i = 1; i < dates.Count; i++)
+            {
+                var cl = ret[pos];
+                var pWeek = (int)cl.Last().DayOfWeek;
+                var cWeek = (int)dates[i].DayOfWeek;
+                
+                if (cWeek != 0 && cWeek < pWeek || (cl.Count == 1 && pWeek == 0))
+                {
+                    cl.Add(dates[i]);
+                }
+                else
+                {                 
+                    ret.Add(new List<DateTime>());
+                    pos++;
+                    var nl = ret[pos];
+                    nl.Add(dates[i]);
+                }
+            }
+            
 
         }
 
