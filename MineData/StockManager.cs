@@ -20,47 +20,76 @@ namespace ConsoleApplication1
             stockInfos = StockInfo.GetSHStockCodes();
         }
 
-        public string Select()
-        {
-            var sb = new StringBuilder();
+        public List<Stock> SelectGold5Fork40()
+        {            
+            var ret = new List<Stock>();
             foreach (var sinfo in stockInfos)
             {
                 var aStock = new Stock(sinfo);
+
+                //取出5点
                 var MA5s = aStock.MAForWeek(5);
                 var MA40s = aStock.MAForWeek(40);
 
+                //1点
                 var ma5 = MA5s.FirstOrDefault();
                 var ma40 = MA40s.FirstOrDefault();
 
+                //2点
                 var ma5_1 = MA5s.Skip(1).FirstOrDefault();
                 var ma40_1 = MA40s.Skip(1).FirstOrDefault();
-                
 
                 if (ma5_1 < ma40_1 && ma5 > ma40)
-                    sb.AppendLine(sinfo.Symbol);
+                    ret.Add(aStock);
             }
-            return sb.ToString();
+
+            return ret;
         }
-
-
-        public string Select2()
+        public List<Stock> SelectAbove181()
         {
-            var sb = new StringBuilder();
+            var ret = new List<Stock>();
             foreach (var info in stockInfos)
             {
                 var aStock = new Stock(info);
+
+                // 181's line
                 var ma181s = aStock.MAForDay(181);
                 var ma181 = ma181s.FirstOrDefault();
-                
+
                 var T = aStock.GetRealTimeInfo();
                 var p = 0M;
                 decimal.TryParse(T.price, out p);
-                if (ma181 > 0 && p > ma181)
-                    sb.AppendLine(info.Symbol);
 
+                if (ma181 > 0 && p > ma181)
+                    ret.Add(aStock);
             }
-            return sb.ToString();
+            return ret;
         }
+
+        public void OutputGoldFork(string fileName)
+        {
+            var stocks = SelectGold5Fork40();
+            OutputToLocal(fileName, stocks);
+        }
+
+        public void OutputAbove181(string fileName)
+        {
+            var stocks = SelectAbove181();
+            OutputToLocal(fileName, stocks);
+        }
+
+        private static void OutputToLocal(string fileName, IEnumerable<Stock> stocks)
+        {
+            using (var sw = new StreamWriter(fileName))
+            {
+                foreach (var stock in stocks)
+                {
+                    if (!stock.Info.Name.Contains("B") && stock.LatestPrice.Close > 0 && stock.LatestPrice.Close < 20)
+                        sw.WriteLine("{0},{1}", stock.Info.Symbol, stock.Info.Name);
+                }
+            }
+        }
+
 
         public BundleStock DownloadTodaySpecialStock(StockInfo stockInfo)
         {

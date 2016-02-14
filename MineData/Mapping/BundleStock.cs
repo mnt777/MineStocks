@@ -98,7 +98,7 @@ namespace ConsoleApplication1.Mapping
                 {
                     var line = sr.ReadLine();
                     var aStock = ConvertFrom(line);
-                    if (aStock != null)
+                    if (aStock != null && aStock.Close > 0)
                         ret.Add(aStock);
                 }
             }

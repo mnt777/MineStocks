@@ -24,6 +24,29 @@ namespace MNT.Utility
             string decodedString = utf8.GetString(encodeBytes);
             return decodedString;
         }
+
+        /// <summary>
+        /// is in same week
+        /// </summary>
+        /// <param name="d1">start date</param>
+        /// <param name="d2">end date</param>
+        /// <returns></returns>
+        public static bool IsInSameWeek(DateTime d1, DateTime d2)
+        {
+            var d1Week = (int)d1.DayOfWeek;
+            var d2Week = (int)d2.DayOfWeek;
+            if (d1Week == 0) d1Week = 7;
+            if (d2Week == 0) d2Week = 7;
+
+            var diff = Math.Abs((d1 - d2).Days);
+
+            if (diff > 7)
+                return false;
+            if (diff == 7 && d1Week == d2Week)
+                return false;
+
+            return diff <= (7 - d1Week);
+        }
     }
 
     public class CommonInfo

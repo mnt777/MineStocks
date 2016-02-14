@@ -39,9 +39,9 @@ namespace ConsoleApplication1.Tests
             Assert.IsNotNull(da);
             Assert.AreEqual(stock603969.Symbol, da.symbol);
             Assert.AreEqual(StockType.SH.ToString(), da.type);
-
-
         }
+
+
 
         [TestMethod()]
         public void DownloadTodaySpecialStockTest()
@@ -71,9 +71,9 @@ namespace ConsoleApplication1.Tests
         {
             var aStock = new Stock(stock603969);
             var val = aStock.MAForDay(5);
-            Assert.AreEqual(12.68m, Math.Round(val[0], 2));
-            Assert.AreEqual(12.42M, Math.Round(val[1], 2));
-            Assert.AreEqual(12.35m, Math.Round(val[2], 2));
+            Assert.AreEqual(12.84m, Math.Round(val[0], 2));
+            Assert.AreEqual(12.68M, Math.Round(val[1], 2));
+            Assert.AreEqual(12.42m, Math.Round(val[2], 2));
         }
 
         [TestMethod()]
@@ -81,7 +81,7 @@ namespace ConsoleApplication1.Tests
         {
             var aStock = new Stock(stock603969);
             var val = aStock.MAForDay(20);
-            Assert.AreEqual(13.49m, val);
+            Assert.AreEqual(13.36m, Math.Round(val[0], 2));
         }
 
         [TestMethod()]
@@ -89,7 +89,7 @@ namespace ConsoleApplication1.Tests
         {
             var aStock = new Stock(stock603969);
             var val = aStock.MAForDay(181);
-            Assert.AreEqual(18.53m, val);
+            Assert.AreEqual(19.73m, Math.Round(val[0], 2));
         }
 
         [TestMethod()]
@@ -100,6 +100,26 @@ namespace ConsoleApplication1.Tests
             Assert.AreEqual(13.77m, Math.Round(val[0], 2));
             Assert.AreEqual(15.13M, Math.Round(val[1], 2));
             Assert.AreEqual(16.45m, Math.Round(val[2], 2));
+            Assert.AreEqual(17.34m, Math.Round(val[3], 2));
+        }
+        [TestMethod()]
+        public void GetMa40ForWeek()
+        {
+            var aStock = new Stock(stock603969);
+            var val = aStock.MAForWeek(40);
+            Assert.AreEqual(19.84M, Math.Round(val[0], 2));
+            Assert.AreEqual(20.36M, Math.Round(val[1], 2));
+            Assert.AreEqual(20.90M, Math.Round(val[2], 2));
+            Assert.AreEqual(21.46M, Math.Round(val[3], 2));
+            Assert.AreEqual(21.91M, Math.Round(val[4], 2));
+        }
+
+        [TestMethod()]
+        public void GetMa20ForWeek()
+        {
+            var aStock = new Stock(stock603969);
+            var val = aStock.MAForWeek(19);
+            Assert.AreEqual(16.56M, Math.Round(val[0], 2));
         }
 
     }
