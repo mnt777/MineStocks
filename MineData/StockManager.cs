@@ -96,6 +96,11 @@ namespace ConsoleApplication1
             return BundleStock.AppendTodayStock(stockInfo.StockCode, DateTime.Now.ToString("yyyyMMdd"));
         }
 
+        public BundleStock DownloadOneDaySpecialStock(StockInfo stockInfo, string strDate)
+        {
+            return BundleStock.AppendTodayStock(stockInfo.StockCode, strDate);
+        }
+
         public void DownloadSpecialStock(StockInfo stockInfo, string from, string to)
         {
             BundleStock.SaveTo(stockInfo, from, to);
@@ -104,9 +109,9 @@ namespace ConsoleApplication1
         /// <summary>
         /// insert today's prices
         /// </summary>
-        public void DownloadToday()
+        public void DownloadToday(string strDate = "")
         {
-            var currentDate = DateTime.Now.ToString("yyyyMMdd");
+            string currentDate = string.IsNullOrEmpty(strDate) ? DateTime.Now.ToString("yyyyMMdd") : strDate;
 
             foreach (var aStockCodeInfo in stockInfos)
             {

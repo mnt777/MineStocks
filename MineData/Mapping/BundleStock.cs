@@ -102,7 +102,7 @@ namespace ConsoleApplication1.Mapping
                         ret.Add(aStock);
                 }
             }
-            return ret;
+            return ret.OrderByDescending(it=>it.Date).ToList();
         }
 
         public static BundleStock AppendTodayStock(string stockCode, string date)
@@ -113,11 +113,16 @@ namespace ConsoleApplication1.Mapping
             var aStockPrice = ConvertFrom(data);
             if (aStockPrice == null) return null;
 
-            var fs = new FileStream(CommonInfo.FilePath(aStockPrice.Symbol), FileMode.Open);
-            var buff = new UTF8Encoding().GetBytes(data.ToString());
-            fs.Write(buff, 0, buff.Length);
-            fs.Flush();
-            fs.Close();
+//            var fs = new FileStream(CommonInfo.FilePath(aStockPrice.Symbol), FileMode.Append);
+//            var buff = new UTF8Encoding().GetBytes(data.ToString());
+//            fs.Write(buff, 0, buff.Length);
+//            fs.Flush();
+//            fs.Close();
+
+            using (var sw = new StreamWriter(CommonInfo.FilePath(aStockPrice.Symbol), true))
+            {
+                sw.WriteLine(data);
+            }
 
             return aStockPrice;
         }
