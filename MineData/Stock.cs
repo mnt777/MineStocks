@@ -66,9 +66,9 @@ namespace ConsoleApplication1
         {
             var ret = new List<decimal>();
             const int dataLength = 5;
-            var loopStop = historyData.Count() / day;
+            var loopStop = historyData.Count() - day;
 
-            if (loopStop > dataLength) loopStop = dataLength;
+            if (loopStop > dataLength) loopStop = dataLength; 
 
             for (int i = 0; i < loopStop; i++)
             {
@@ -123,6 +123,7 @@ namespace ConsoleApplication1
         public DailyStock GetRealTimeInfo()
         {
             var originData = GetNetStockData(stockInfo.StockCode);
+            if (originData == "") return DailyStock.EmptyStock();
             var header = BuildHeader();
             var d = originData.Substring(header.Length, originData.Length - header.Length - CommonInfo.tailerFmt.Length);
             var aRealTimeStock = JsonHelper.DeserializeJsonToObject<DailyStock>(d);

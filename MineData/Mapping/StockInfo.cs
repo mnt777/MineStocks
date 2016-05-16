@@ -28,6 +28,11 @@ namespace ConsoleApplication1.Mapping
             return GetStocksFor(CommonInfo.SHStockCodePosition, StockType.SH);
         }
 
+        public static List<StockInfo> GetSZStockCodes()
+        {
+            return GetStocksFor(CommonInfo.SZStockCodePosition, StockType.SZ);
+        }
+
         public static List<StockInfo> GetStocksFor(string stockCodePosition, StockType stockType)
         {
             var stocks = new List<StockInfo>();

@@ -160,5 +160,10 @@ namespace ConsoleApplication1.Mapping
             //    );
             return base.ToString();
         }
+
+        public static DailyStock EmptyStock()
+        {
+            return new DailyStock();
+        }
     }
 }

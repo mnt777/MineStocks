@@ -121,7 +121,7 @@ namespace ConsoleApplication1.Mapping
 
             using (var sw = new StreamWriter(CommonInfo.FilePath(aStockPrice.Symbol), true))
             {
-                sw.WriteLine(data);
+                sw.Write(data);
             }
 
             return aStockPrice;

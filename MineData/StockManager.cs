@@ -11,13 +11,26 @@ namespace ConsoleApplication1
 {
     public class StockManager
     {
-        public string StockCodePosition = CommonInfo.SHStockCodePosition;
+        //public string StockCodePosition = CommonInfo.SHStockCodePosition;
 
-        private List<StockInfo> stockInfos;
+        private List<StockInfo> stockInfos = new List<StockInfo>();
+
+        public decimal LimitPrice { get; set; }
 
         public StockManager()
         {
-            stockInfos = StockInfo.GetSHStockCodes();
+            stockInfos.Clear();
+            stockInfos.AddRange(StockInfo.GetSHStockCodes());
+            stockInfos.AddRange(StockInfo.GetSZStockCodes());
+            LimitPrice = 20.0M;
+        }
+
+        public StockManager(StockType sType)
+        {
+            stockInfos.Clear();
+            if (sType == StockType.SH) stockInfos.AddRange(StockInfo.GetSHStockCodes());
+            if (sType == StockType.SZ) stockInfos.AddRange(StockInfo.GetSZStockCodes());
+            LimitPrice = 20.0M;
         }
 
         public List<Stock> SelectGold5Fork40()
@@ -40,6 +53,32 @@ namespace ConsoleApplication1
                 var ma40_1 = MA40s.Skip(1).FirstOrDefault();
 
                 if (ma5_1 < ma40_1 && ma5 > ma40)
+                    ret.Add(aStock);
+            }
+
+            return ret;
+        }
+
+        public List<Stock> SelectGold13Fork34()
+        {
+            var ret = new List<Stock>();
+            foreach (var sinfo in stockInfos)
+            {
+                var aStock = new Stock(sinfo);
+
+                //取出5点
+                var MA13s = aStock.MAForDay(13);
+                var MA34s = aStock.MAForDay(34);
+
+                //1点
+                var ma13 = MA13s.FirstOrDefault();
+                var ma34 = MA34s.FirstOrDefault();
+
+                //2点
+                var ma13_1 = MA13s.Skip(1).FirstOrDefault();
+                var ma34_1 = MA34s.Skip(1).FirstOrDefault();
+
+                if (ma13_1 < ma34_1 && ma13 > ma34)
                     ret.Add(aStock);
             }
 
@@ -68,7 +107,9 @@ namespace ConsoleApplication1
 
         public void OutputGoldFork(string fileName)
         {
-            var stocks = SelectGold5Fork40();
+            //var stocks = SelectGold5Fork40();
+
+            var stocks = SelectGold13Fork34();
             OutputToLocal(fileName, stocks);
         }
 
@@ -78,13 +119,13 @@ namespace ConsoleApplication1
             OutputToLocal(fileName, stocks);
         }
 
-        private static void OutputToLocal(string fileName, IEnumerable<Stock> stocks)
+        private void OutputToLocal(string fileName, IEnumerable<Stock> stocks)
         {
             using (var sw = new StreamWriter(fileName))
             {
                 foreach (var stock in stocks)
                 {
-                    if (!stock.Info.Name.Contains("B") && stock.LatestPrice.Close > 0 && stock.LatestPrice.Close < 20)
+                    if (!stock.Info.Name.Contains("B") && stock.LatestPrice.Close > 0 && stock.LatestPrice.Close < LimitPrice)
                         sw.WriteLine("{0},{1}", stock.Info.Symbol, stock.Info.Name);
                 }
             }

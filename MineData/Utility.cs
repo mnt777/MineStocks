@@ -58,7 +58,7 @@ namespace MNT.Utility
 
         public const string resourcePath = "../../../resource/";
         public const string SHStockCodePosition = "../../../resource/SH/StockCode_SH.dat";
-
+        public const string SZStockCodePosition = "../../../resource/SZ/StockCode_SZ.dat";
 
         public static string FilePath(string stockSymbol)
         {
